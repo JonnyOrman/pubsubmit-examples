@@ -9,7 +9,7 @@ services:
     image: jonnyorman/pubsub-provisioner:latest
     environment:
       PUBSUB_EMULATOR_HOST: firebase-emulator:8085
-      PUBSUB_CONFIG: '{ "projectId": "my-pubsubmit-project", "topics": [ { "topicId": "MyCollection-create-submit", "subscriptions": [ { "type": "push", "subscriptionId": "MyCollection-submit-complete", "ackDeadlineSeconds": 10, "pushEndpoint": "http://firesert:3002" } ] } ] }'
+      PUBSUB_CONFIG: '{ "projectId": "my-pubsubmit-project", "topics": [ { "topicId": "MyCollection-create-submit", "subscriptions": [] } ] }'
     depends_on:
       - firebase-emulator
   example1:
