@@ -1,0 +1,76 @@
+version: '3.8'
+services:
+  firebase-emulator:
+    build:
+      context: ./firebase-emulator
+    ports:
+      - "8085:8085"
+  pubsub-setup:
+    image: jonnyorman/pubsub-provisioner:latest
+    environment:
+      PUBSUB_EMULATOR_HOST: firebase-emulator:8085
+      PUBSUB_CONFIG: '{ "projectId": "my-pubsubmit-project", "topics": [ { "topicId": "MyCollection-create-submit", "subscriptions": [] } ] }'
+    depends_on:
+      - firebase-emulator
+  example1:
+    build:
+      context: ./example1
+    env_file:
+      - ./.env
+    environment:
+      PORT: 3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      - pubsub-setup
+  example2:
+    build:
+      context: ./example2
+    env_file:
+      - ./.env
+    environment:
+      PORT: 3002
+    ports:
+      - "3002:3002"
+    depends_on:
+      - pubsub-setup
+  example3:
+    build:
+      context: ./example3
+    env_file:
+      - ./.env
+    environment:
+      PORT: 3003
+      PROJECT_ID: "my-pubsubmit-project"
+      COLLECTION_NAME: "MyCollection"
+      OPERATION: "create"
+    ports:
+      - "3003:3003"
+    depends_on:
+      - pubsub-setup
+  example4:
+    build:
+      context: ./example4
+    env_file:
+      - ./.env
+    environment:
+      PORT: 3004
+      COLLECTION_NAME: "MyCollection"
+      OPERATION: "create"
+    ports:
+      - "3004:3004"
+    depends_on:
+      - pubsub-setup
+  example5:
+    image: jonnyorman/pubsubmit:latest
+    env_file:
+      - ./.env
+    environment:
+      PORT: 3005
+      PROJECT_ID: "my-pubsubmit-project"
+      COLLECTION_NAME: "MyCollection"
+      OPERATION: "create"
+    ports:
+      - "3005:3005"
+    depends_on:
+      - pubsub-setup
